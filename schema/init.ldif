@@ -1,6 +1,0 @@
-dn: dc=0616015,dc=nasa
-dc: 0616015
-o:  0616015
-objectclass: organization
-objectclass: dcObject
-

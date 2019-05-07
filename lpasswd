@@ -1,0 +1,25 @@
+#!/bin/sh
+
+SEARCH_RESULT=$(ldapsearch -Z '(cn='"$USER"')' | grep numEntries | wc -l)
+if [ $SEARCH_RESULT -eq 0 ]; then
+    # original version of passwd
+    /usr/bin/passwd
+    return 0
+fi
+    
+
+stty -echo
+read -p "Old Password: " oldp; echo
+read -p "New Password: " np1; echo
+read -p "Retype New Password: " np2; echo
+stty echo
+
+if [ "$np1" != "$np2" ]; then
+    echo "Passwords do not match."
+    exit 1
+fi
+
+ldappasswd -D uid="$USER",dc=0616015,dc=nasa \
+    -w "$oldp" \
+    -a "$oldp" \
+    -s "$np1"
